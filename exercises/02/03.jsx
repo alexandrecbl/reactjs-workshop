@@ -37,10 +37,30 @@ import PropTypes from 'prop-types';
 //
 // [1] https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
 class Timer extends React.Component {
+  state = {
+    timestamp: new Date(this.props.datetimestamp || Date.now())
+  };
+
+  oneSecond = 1000;
+
+  componentDidMount(){
+    this.timerId = setInterval(() => {
+      this.setState(prevState => {
+        return {
+          timestamp: new Date(prevState.timestamp.getTime() + this.oneSecond)
+        }
+      })
+    }, this.oneSecond)
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.timerId);
+  }
+
   render() {
     return (
       <div>
-        Start HERE!
+        Time: {this.state.timestamp.toLocaleTimeString()}
       </div>
     );
   }
